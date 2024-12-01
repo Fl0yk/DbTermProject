@@ -1,0 +1,131 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <StartupObject>Crematorium.UI.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <None Remove="Resourse\Images\all-orders-white.png" />
+    <None Remove="Resourse\Images\all-orders.png" />
+    <None Remove="Resourse\Images\bitbucket-white.png" />
+    <None Remove="Resourse\Images\bitbucket.png" />
+    <None Remove="Resourse\Images\close-white.png" />
+    <None Remove="Resourse\Images\close-window.png" />
+    <None Remove="Resourse\Images\hall-white.png" />
+    <None Remove="Resourse\Images\hall.png" />
+    <None Remove="Resourse\Images\house-white.png" />
+    <None Remove="Resourse\Images\house.png" />
+    <None Remove="Resourse\Images\menu-white.png" />
+    <None Remove="Resourse\Images\menu.png" />
+    <None Remove="Resourse\Images\minimize-white.png" />
+    <None Remove="Resourse\Images\new-orders-white.png" />
+    <None Remove="Resourse\Images\new-orders.png" />
+    <None Remove="Resourse\Images\orders-white.png" />
+    <None Remove="Resourse\Images\orders.png" />
+    <None Remove="Resourse\Images\user-conf-white.png" />
+    <None Remove="Resourse\Images\user-conf.png" />
+    <None Remove="Resourse\Images\user-white.png" />
+    <None Remove="Resourse\Images\users-white.png" />
+    <None Remove="Resourse\Images\users.png" />
+    <None Remove="Resourse\Images\user_config.png" />
+    <None Remove="Resourse\Images\window-minimize.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Crematorium.Application\Crematorium.Application.csproj" />
+    <ProjectReference Include="..\Crematorium.Domain\Crematorium.Domain.csproj" />
+    <ProjectReference Include="..\Crematorium.Persistense\Crematorium.Persistense.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resourse\Images\all-orders-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\all-orders.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\bitbucket-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\bitbucket.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\close-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\close-window.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\hall-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\hall.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\house-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\house.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\menu-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\menu.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\minimize-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\new-orders-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\new-orders.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\orders-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\orders.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\user-conf-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\user-conf.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\user-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\users-white.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\users.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\user_config.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resourse\Images\window-minimize.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

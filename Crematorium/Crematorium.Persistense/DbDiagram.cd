@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Crematorium.Persistense.Repository.EfRepository&lt;T&gt;" Collapsed="true">
+    <Position X="16.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIRAAAAAAAAAEAAAAAIAgAAAAAAAAAIIE=</HashCode>
+      <FileName>Repository\EfRepository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_context" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Crematorium.Persistense.Repository.EfUnitOfWork" Collapsed="true">
+    <Position X="14.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gEAAAAAgAAECBAAAEAAAAAAAAIBCAAAAAABAADAAAAA=</HashCode>
+      <FileName>Repository\EfUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_context" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Crematorium.Persistense.Data.CrematoriumDbContext" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAAIAAAAAAABAAgAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Data\CrematoriumDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

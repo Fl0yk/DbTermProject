@@ -1,0 +1,267 @@
+﻿<Window x:Class="Crematorium.UI.Pages.OrderInformationPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Crematorium.UI.Pages"
+        xmlns:converters="clr-namespace:Crematorium.UI.Converters"
+        xmlns:properties="clr-namespace:Crematorium.UI.Converters.PropertyConverters"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        Height="590" Width="600"
+        AllowsTransparency="True"
+        MouseDown="Window_MousDown"
+        Background="Transparent">
+    <!--#region RESOURCES-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/BtnStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/TextStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/ComboBoxStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PriceToStringConverter x:Key="PriceToStr"/>
+            <converters:CapacityToStringConverter x:Key="CapacityToStr"/>
+            <properties:DateOfStartToStringConverter x:Key="DateOfStart"/>
+            <properties:StateToStringConverter x:Key="StateToStr"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <!--#endregion-->
+    <Border CornerRadius="10"
+            Background="#FFF8D0D0"
+            BorderBrush="#FFB2043E"
+            BorderThickness="3">
+        <Grid>
+            <!--#region ROW/COLUMNS-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region TITLE-->
+            <TextBlock Grid.Row="1"
+                       Grid.ColumnSpan="6"
+                       Text="Order information"
+                       HorizontalAlignment="Center"
+                       FontSize="32"/>
+            <!--#endregion-->
+            <!--#region BUTTON-->
+            <Button Grid.Column="1"
+                    Grid.Row="1"
+                    Width="80"
+                    Height="20"
+                    HorizontalAlignment="Left"
+                    Background="#FFF53657"
+                    Click="Back"
+                    Style="{StaticResource BaseBtnStyle}">
+                <TextBlock Text="Back"/>
+            </Button>
+            <!--#endregion-->
+            <!--#region CONTENT-->
+            <!--#region CUSTOMER-->
+            <Border Grid.Row="3" Grid.RowSpan="5"
+                    Grid.Column="1"
+                    Margin="0, 0, 0, 3"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="#FF5A040D">
+                <Grid DataContext="{Binding Path=SelectedCustomer}">
+                    <!--#region ROWS-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!--#endregion-->
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               FontSize="26"
+                               Text="Customer"/>
+                    <TextBlock Grid.Row="2"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Name}"/>
+                    <TextBlock Grid.Row="4"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Surname}"/>
+                    <TextBlock Grid.Row="6"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=NumPassport}"/>
+                    <TextBlock Grid.Row="8"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=MailAdress}"/>
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#region CORPOSE-->
+            <Border Grid.Row="8" Grid.RowSpan="4"
+                    Grid.Column="1"
+                    Margin="0, 3, 0, 0"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="#FF5A040D">
+                <Grid DataContext="{Binding Path=SelectedCorpose}">
+                    <!--#region ROWS-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!--#endregion-->
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               FontSize="26"
+                               Text="Corpose"/>
+                    <TextBlock Grid.Row="2"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Name}"/>
+                    <TextBlock Grid.Row="4"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=SurName}"/>
+                    <TextBlock Grid.Row="6"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=NumPassport}"/>
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#region URN-->
+            <Border Grid.Row="3" Grid.RowSpan="5"
+                    Grid.Column="3"
+                    Margin="0, 0, 0, 3"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="#FF5A040D">
+                <Grid DataContext="{Binding Path=SelectedUrn}">
+                    <!--#region ROWS-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="150"/>
+                    </Grid.RowDefinitions>
+                    <!--#endregion-->
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               FontSize="26"
+                               Text="Ritual Urn"/>
+                    <TextBlock Grid.Row="2"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Name}"/>
+                    <Image Grid.Row="4" Height="145" 
+                           Margin="0, 0, 0, 3"
+                           Source="{Binding Image}" />
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#region HALL-->
+            <Border Grid.Row="8" Grid.RowSpan="4"
+                    Grid.Column="3"
+                    Margin="0, 3, 0, 3"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="#FF5A040D">
+                <Grid DataContext="{Binding Path=SelectedHall}">
+                    <!--#region ROWS-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!--#endregion-->
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               FontSize="26"
+                               Text="Hall"/>
+                    <TextBlock Grid.Row="2"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Name}"/>
+                    <TextBlock Grid.Row="4"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Capacity, 
+                                    Converter={StaticResource CapacityToStr}}"/>
+                    <TextBlock Grid.Row="6"
+                               HorizontalAlignment="Center"
+                               Text="{Binding Path=Price, 
+                                    Converter={StaticResource PriceToStr}}"/>
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#region STATE-->
+            <Border Grid.Row="12"
+                    Grid.Column="1"
+                    Width="210"
+                    Margin="0, 3, 0, 3"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="#FF5A040D">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Text="{Binding Path=SelectedState, 
+                                    Converter={StaticResource StateToStr}}"/>
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#region DATE-->
+            <Border Grid.Row="12"
+                    Grid.Column="3"
+                    Margin="0, 3, 0, 0"
+                    CornerRadius="10"
+                    BorderThickness="2"
+                    BorderBrush="#FF5A040D">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                            HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                            Text="{Binding Path=DateOfStart, 
+                                    Converter={StaticResource DateOfStart}}"/>
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#endregion-->
+        </Grid>
+    </Border>
+</Window>

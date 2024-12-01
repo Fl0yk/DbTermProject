@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Crematorium.Domain.Entities.Base">
+    <Position X="10" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Base.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.Corpose">
+    <Position X="15.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Entities\Corpose.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.Entity">
+    <Position X="14.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.Date">
+    <Position X="11.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Date.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.Hall">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAACAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Entities\Hall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.Order" Collapsed="true">
+    <Position X="14.25" Y="1.75" Width="1.5" />
+    <AssociationLine Name="State" Type="Crematorium.Domain.Entities.StateOrder" FixedFromPoint="true">
+      <Path>
+        <Point X="14.25" Y="1.938" />
+        <Point X="12" Y="1.938" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="DateOfStart" Type="Crematorium.Domain.Entities.Date" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="2.312" />
+        <Point X="12.375" Y="2.312" />
+        <Point X="12.375" Y="3" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="CorposeId" Type="Crematorium.Domain.Entities.Corpose" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="15.75" Y="2.312" />
+        <Point X="16.469" Y="2.312" />
+        <Point X="16.469" Y="4.75" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="HallId" Type="Crematorium.Domain.Entities.Hall" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="15.312" Y="2.441" />
+        <Point X="15.312" Y="4.45" />
+        <Point X="14.646" Y="4.45" Type="JumpStart" />
+        <Point X="14.479" Y="4.45" Type="JumpEnd" />
+        <Point X="12.812" Y="4.45" />
+        <Point X="12.812" Y="4.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BAEAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAABCCAAAA=</HashCode>
+      <FileName>Entities\Order.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Customer" />
+      <Property Name="State" />
+      <Property Name="DateOfStart" />
+      <Property Name="CorposeId" />
+      <Property Name="RitualUrnId" />
+      <Property Name="HallId" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.RitualUrn">
+    <Position X="14" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="Crematorium.Domain.Entities.Entity" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.25" Y="7.307" />
+        <Point X="13.95" Y="7.307" />
+        <Point X="13.95" Y="6.475" />
+        <Point X="14.375" Y="6.475" />
+        <Point X="14.375" Y="6.175" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\RitualUrn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Crematorium.Domain.Entities.User">
+    <Position X="17.5" Y="3.5" Width="1.5" />
+    <AssociationLine Name="UserRole" Type="Crematorium.Domain.Entities.Role">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.898" Y="0.12" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IAEAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAAAAgAAAA=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="UserRole" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Crematorium.Domain.Entities.StateOrder">
+    <Position X="10.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACACAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAAA=</HashCode>
+      <FileName>Entities\Order.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Crematorium.Domain.Entities.Role">
+    <Position X="17.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAQAACAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="Crematorium.UI.Pages.AllOrdersPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:Crematorium.UI.Converters"
+             xmlns:properties="clr-namespace:Crematorium.UI.Converters.PropertyConverters"
+             xmlns:visibles="clr-namespace:Crematorium.UI.Converters.VisibleConverters"
+             xmlns:local="clr-namespace:Crematorium.UI.Pages"
+             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="560" d:DesignWidth="925"
+             Background="Transparent">
+    <!--#region RESOURCES-->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/BtnStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/TextStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/ElementsStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Resourse/Styles/DataGridStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:RoleToStrConverter x:Key="RoleToStr"/>
+            <properties:StateToStringConverter x:Key="StateToStr"/>
+            <properties:GetCustomerSurNameConverter x:Key="GetCustomerSurname"/>
+            <properties:DateOfStartToStringConverter x:Key="GetDateOfStart"/>
+            <properties:GetCorposeSurNameConverter x:Key="GetCorposeSurname"/>
+            <properties:GetHallNameConverter x:Key="GetHallName"/>
+            <visibles:AdminConverter x:Key="AdminVisible"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!--#endregion-->
+    <Border CornerRadius="10"
+            Background="#FFF8D0D0">
+        <Grid x:Name="OrdersGrid">
+            <!--#region ROW/COLUMNS-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <!--#endregion-->
+            <!--#region TITLE-->
+            <TextBlock Grid.Row="0"
+                       Grid.ColumnSpan="6"
+                       Text="All Orders Service"
+                       HorizontalAlignment="Center"
+                       FontSize="32"/>
+            <!--#endregion-->
+            <!--#region DATAGRID-->
+            <DataGrid Grid.Row="3" Grid.RowSpan="2"
+                      Grid.Column="1" Grid.ColumnSpan="4"
+                      x:Name="OrdersDataGrid"
+                      Style="{StaticResource BaseDataGrid}"
+                      ItemsSource="{Binding Orders}"
+                      SelectedItem="{Binding Path=SelectedOrder}"
+                      IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID"
+                                        Width="50"
+                                        Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Customer"
+                                        Width="*"
+                                        Binding="{Binding Path=Customer, 
+                                                    Converter={StaticResource GetCustomerSurname}}"/>
+                    <DataGridTextColumn Header="Date"
+                                        Width="120" Binding="{Binding Path=DateOfStart,
+                                                    Converter={StaticResource GetDateOfStart}}"/>
+                    <DataGridTextColumn Header="State"
+                                        Width="120" Binding="{Binding Path=State, 
+                                                    Converter={StaticResource StateToStr}}"/>
+                    <DataGridTextColumn Header="Corpose"
+                                        Width="*" Binding="{Binding Path=CorposeId,
+                                                    Converter={StaticResource GetCorposeSurname}}"/>
+                    <DataGridTextColumn Header="Hall"
+                                        Width="180" Binding="{Binding Path=HallId,
+                                                    Converter={StaticResource GetHallName}}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--#endregion-->
+            <!--#region BUTNOPTIONS-->
+            <Button Grid.Column="1"
+                    Grid.Row="5"
+                    Width="130"
+                    Background="#FFF53657"
+                    Command="{Binding Path=NextStateOrderCommand}"
+                    Style="{StaticResource BaseBtnStyle}">
+                <TextBlock Text="Next state"/>
+            </Button>
+            <Button Grid.Column="2"
+                    Grid.Row="5"
+                    Width="90"
+                    Background="#FFF53657"
+                    Command="{Binding Path=ViewOrderCommand}"
+                    Style="{StaticResource BaseBtnStyle}">
+                <TextBlock Text="See all"/>
+            </Button>
+            <Button Grid.Column="3"
+                    Grid.Row="5"
+                    Width="90"
+                    Background="#FFF53657"
+                    Command="{Binding Path=CancelOrderCommand}"
+                    Style="{StaticResource BaseBtnStyle}">
+                <TextBlock Text="Cancel"/>
+            </Button>
+            <!--#endregion-->
+            <!--#region FRAMEUSERS-->
+            <Frame x:Name="FrameUsers"
+                   Grid.Column="0" Grid.ColumnSpan="6"
+                   Grid.Row="0" Grid.RowSpan="8"/>
+            <!--#endregion-->
+        </Grid>
+    </Border>
+</UserControl>
