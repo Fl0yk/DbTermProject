@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Crematorium.Application.Abstractions;
+using Crematorium.Application.Abstractions.Services;
 using Crematorium.Application.Validators;
+using Crematorium.Domain.Abstractions;
 using Crematorium.Domain.Entities;
 using Crematorium.UI.Fabrics;
-using FluentValidation;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Crematorium.UI.ViewModels
@@ -13,9 +14,11 @@ namespace Crematorium.UI.ViewModels
     public partial class UserChangeVM : ObservableValidator
     {
         private IUserService _userService;
+        private readonly IUnitOfWork _unitOfWork;
         private bool _isNewUser;
-        public UserChangeVM(IUserService userService)
+        public UserChangeVM(IUserService userService, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _userService = userService;
             SelectedRole = Role.NoName;
         }
@@ -83,6 +86,7 @@ namespace Crematorium.UI.ViewModels
                 throw new ArgumentNullException("User not initialized");
 
             UserValidator validations = new UserValidator();
+            FluentValidation.Results.ValidationResult validationResult;
 
             switch (Operation)
             {
@@ -91,30 +95,66 @@ namespace Crematorium.UI.ViewModels
                     NumPassportCoincide();
                     User.NumPassport = this.NumPassport;
                     InitializeValue(true);
-                    validations.ValidateAndThrow(User);
+
+                    validationResult = validations.Validate(User);
+
+                    if (!validationResult.IsValid)
+                    {
+                        throw new Exception(string.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
+                    }
+
                     await _userService.AddAsync(User);
-                    ServicesFabric.CurrentUser = this.User;
+
+                    ServicesFabric.CurrentUser = await _userService.GetUserByNameAndPassport(User.Name, User.NumPassport);
+
+                    _unitOfWork.UserAuthLogger.Log(User.NumPassport, Domain.Enums.LogAction.Register);
+
                     break;
 
                 case UserChangeOperation.UserUpdate:
                     NumPassportMatch();
                     InitializeValue(true);
-                    validations.ValidateAndThrow(User);
+
+                    validationResult = validations.Validate(User);
+
+                    if (!validationResult.IsValid)
+                    {
+                        throw new Exception(string.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
+                    }
+
                     await _userService.UpdateAsync(User);
+
+                    ServicesFabric.CurrentUser = await _userService.GetUserByNameAndPassport(User.Name, User.NumPassport);
+
                     break;
 
                 case UserChangeOperation.AdminAdd:
                     IsBusyNumber();
                     User.NumPassport = this.NumPassport;
                     InitializeValue(false);
-                    validations.ValidateAndThrow(User);
+
+                    validationResult = validations.Validate(User);
+
+                    if (!validationResult.IsValid)
+                    {
+                        throw new Exception(string.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
+                    }
+
                     await _userService.AddAsync(User);
                     break;
 
                 case UserChangeOperation.AdminUpdate:
                     InitializeValue(false);
-                    validations.ValidateAndThrow(User);
+
+                    validationResult = validations.Validate(User);
+
+                    if (!validationResult.IsValid)
+                    {
+                        throw new Exception(string.Join('\n', validationResult.Errors.Select(e => e.ErrorMessage)));
+                    }
+
                     await _userService.UpdateAsync(User);
+
                     break;
 
                 default:

@@ -9,15 +9,16 @@ public class RitualUrnRepository : IRitualUrnRepository
 {
     private readonly NpgsqlDataSource _source;
 
-    public RitualUrnRepository(string connectionString)
+    public RitualUrnRepository(NpgsqlDataSource source)
     {
-        _source = NpgsqlDataSource.Create(connectionString);
+        _source = source;
     }
 
     public async Task CreateAsync(RitualUrn urn, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand($"CALL CreateRitualUrn('{urn.Name}', {urn.Price.ToString(CultureInfo.GetCultureInfo("en-US"))}, '{urn.Image}');");
+        await using var connection = _source.OpenConnection();
+
+        await using var command = new NpgsqlCommand($"CALL CreateRitualUrn('{urn.Name}', {urn.Price.ToString(CultureInfo.GetCultureInfo("en-US"))}, '{urn.Image}');", connection);
 
         try
         {
@@ -31,8 +32,8 @@ public class RitualUrnRepository : IRitualUrnRepository
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand($"CALL DeleteRitualUrnById({id});");
+        await using var connection = _source.OpenConnection();
+        await using var command = new NpgsqlCommand($"CALL DeleteRitualUrnById({id});", connection);
 
         try
         {
@@ -46,18 +47,22 @@ public class RitualUrnRepository : IRitualUrnRepository
 
     public async Task<IEnumerable<RitualUrn>> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand($"SELECT * FROM PartialSearchRitualUrn('{name}')");
+        await using var connection = _source.OpenConnection();
+        await using var command = new NpgsqlCommand($"SELECT * FROM PartialSearchRitualUrn('{name}')", connection);
 
         return await GetManyUrns(command);
     }
 
     public async Task<IEnumerable<RitualUrn>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand("SELECT Id, Name, Price, Image FROM RitualUrn;");
+        await using var connection = _source.OpenConnection();
+        await using var command = new NpgsqlCommand("SELECT Id, Name, Price, Image FROM RitualUrn;", connection);
 
-        return await GetManyUrns(command);
+        var res = await GetManyUrns(command);
+
+        connection.Close();
+
+        return res;
     }
 
     public async Task<RitualUrn?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
@@ -67,11 +72,10 @@ public class RitualUrnRepository : IRitualUrnRepository
             return null;
         }
 
-        _source.OpenConnection();
+        await using var connection = _source.OpenConnection();
+        await using var command = new NpgsqlCommand($"SELECT * FROM RitualUrn WHERE Id={id}", connection);
 
-        await using var command = _source.CreateCommand($"SELECT * FROM RitualUrn WHERE Id={id}");
-
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         if (!await reader.ReadAsync())
         {
@@ -83,16 +87,15 @@ public class RitualUrnRepository : IRitualUrnRepository
         urn.Id = (int)reader["Id"];
         urn.Name = (string)reader["Name"];
         urn.Price = (decimal)reader["Price"];
-        urn.Image = (string)reader["Image"];//StringToBytes((string)reader["Image"]);
+        urn.Image = (string)reader["Image"];
 
         return urn;
     }
 
     public async Task UpdateAsync(RitualUrn urn, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-
-        await using var command = _source.CreateCommand($"CALL UpdateRitualUrn({urn.Id}, '{urn.Name}', {urn.Price.ToString(CultureInfo.GetCultureInfo("en-US"))}, '{urn.Image}');");
+        await using var connection = _source.OpenConnection();
+        await using var command = new NpgsqlCommand($"CALL UpdateRitualUrn({urn.Id}, '{urn.Name}', {urn.Price.ToString(CultureInfo.GetCultureInfo("en-US"))}, '{urn.Image}');", connection);
 
         try
         {
@@ -108,28 +111,17 @@ public class RitualUrnRepository : IRitualUrnRepository
     {
         var result = new List<RitualUrn>();
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
         while (await reader.ReadAsync())
         {
             var id = (int)reader["Id"];
             var name = (string)reader["Name"];
             var price = (decimal)reader["Price"];
-            //var image = new byte[0]; //StringToBytes((string)reader["Image"]);
             var image = (string)reader["Image"];
 
             result.Add(new RitualUrn() { Id = id, Name = name, Price = price, Image = image });
         }
 
         return result;
-    }
-
-    private static string BytesToString(byte[] data)
-    {
-        return string.Join(',', data);
-    }
-
-    private static byte[] StringToBytes(string data)
-    {
-        return data.Split(',').Select(byte.Parse).ToArray();
     }
 }

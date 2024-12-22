@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crematorium.Application.Abstractions
+namespace Crematorium.Application.Abstractions.Services
 {
     public interface IHelpersService<T> : IBaseService<T> where T : Entity
     {

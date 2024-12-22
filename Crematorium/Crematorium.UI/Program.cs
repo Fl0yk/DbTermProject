@@ -1,12 +1,10 @@
-﻿using Crematorium.Application.Abstractions;
+﻿using Crematorium.Application.Abstractions.Services;
 using Crematorium.Application.Services;
 using Crematorium.Domain.Abstractions;
-using Crematorium.Persistense.Data;
 using Crematorium.Persistense.Repository;
 using Crematorium.UI.Fabrics;
 using Crematorium.UI.Pages;
 using Crematorium.UI.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,23 +43,14 @@ namespace Crematorium.UI
 
         private static void SetupServices(IServiceCollection services, IConfiguration config)
         {
-            var connStr = config.GetConnectionString("SqliteConnection");
-
-
-            //Data base
-            services.AddDbContext<CrematoriumDbContext>(options =>
-            {
-                options.UseSqlite(connStr);
-            });
-
             //Services
             //services.AddSingleton<IUnitOfWork, FakeUnitOfWork>();
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IRitualUrnService, RitualUrnService>();
-            services.AddSingleton<ICorposeService,  CorposeService>();
-            services.AddSingleton<IHallService, HallService>();
-            services.AddSingleton<IOrderService, OrderService>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRitualUrnService, RitualUrnService>();
+            services.AddTransient<ICorposeService,  CorposeService>();
+            services.AddTransient<IHallService, HallService>();
+            services.AddTransient<IOrderService, OrderService>();
 
             //Pages
             services.AddTransient<App>();

@@ -8,14 +8,14 @@ public class CorposeRepository : ICorposeRepository
 {
     private readonly NpgsqlDataSource _source;
 
-    public CorposeRepository(string connectionString)
+    public CorposeRepository(NpgsqlDataSource source)
     {
-        _source = NpgsqlDataSource.Create(connectionString);
+        _source = source;
     }
 
     public async Task AddAsync(Corpose corpose, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
 
         await using var command = _source.CreateCommand($"CALL CreateCorpse('{corpose.Name}', '{corpose.SurName}', '{corpose.NumPassport}');");
         
@@ -31,7 +31,7 @@ public class CorposeRepository : ICorposeRepository
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
 
         await using var command = _source.CreateCommand($"CALL DeleteCorpseById({id});");
 
@@ -55,7 +55,7 @@ public class CorposeRepository : ICorposeRepository
 
     public async Task<IEnumerable<Corpose>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"SELECT Id, Name, Surname, NumPassport FROM Corpose;");
 
         return await GetManyCorposes(command);
@@ -71,7 +71,7 @@ public class CorposeRepository : ICorposeRepository
         await using var command = _source.CreateCommand($"SELECT Id, Name, Surname, NumPassport FROM Corpose " +
                                                             $"WHERE Id='{id}';");
 
-        var reader = await command.ExecuteReaderAsync();
+        using var reader = command.ExecuteReader();
 
         if (!await reader.ReadAsync())
         {
@@ -90,7 +90,7 @@ public class CorposeRepository : ICorposeRepository
 
     public async Task UpdateAsync(Corpose corpose, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"CALL UpdateCorpse({corpose.Id}, '{corpose.Name}', '{corpose.SurName}', '{corpose.NumPassport}');");
 
 
@@ -108,7 +108,7 @@ public class CorposeRepository : ICorposeRepository
     {
         List<Corpose> res = new();
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         while (await reader.ReadAsync())
         {

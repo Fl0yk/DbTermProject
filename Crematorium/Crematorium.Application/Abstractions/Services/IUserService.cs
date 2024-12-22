@@ -1,6 +1,6 @@
 ﻿using Crematorium.Domain.Entities;
 
-namespace Crematorium.Application.Abstractions
+namespace Crematorium.Application.Abstractions.Services
 {
     public interface IUserService
     {

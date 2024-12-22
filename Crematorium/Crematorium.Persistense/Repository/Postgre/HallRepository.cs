@@ -9,14 +9,13 @@ public class HallRepository : IHallRepository
 {
     private readonly NpgsqlDataSource _source;
 
-    public HallRepository(string connectionString)
+    public HallRepository(NpgsqlDataSource source)
     {
-        _source = NpgsqlDataSource.Create(connectionString);
+        _source = source;
     }
 
     public async Task AddAsync(Hall hall, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
         await using var command = _source.CreateCommand($"CALL CreateHall('{hall.Name}', '{hall.Capacity}', " +
                                             $"'{hall.Price.ToString(CultureInfo.GetCultureInfo("en-US"))}');");
 
@@ -32,7 +31,6 @@ public class HallRepository : IHallRepository
 
     public async Task AddFreeDate(int id, DateTime date, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
         await using var command = _source.CreateCommand($"INSERT INTO Dates (HallId, Date) VALUES ({id}, date('{date:yyyy-MM-dd}'));");
 
         try
@@ -47,7 +45,6 @@ public class HallRepository : IHallRepository
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
         await using var command = _source.CreateCommand($"CALL DeleteHallById('{id}');");
 
         try
@@ -62,7 +59,6 @@ public class HallRepository : IHallRepository
 
     public async Task<IEnumerable<Hall>> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
         await using var command = _source.CreateCommand($"SELECT * FROM PartialSearchHall('{name}')");
 
         return await GetManyWithDates(command);
@@ -70,8 +66,6 @@ public class HallRepository : IHallRepository
 
     public async Task<IEnumerable<Hall>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-
         await using var command = _source.CreateCommand($"SELECT h.Id, h.Name, h.Capacity, h.Price, d.date " +
                                                         $"FROM Hall AS h " +
                                                         $"LEFT OUTER JOIN Dates AS d ON h.Id=d.HallId " +
@@ -87,15 +81,13 @@ public class HallRepository : IHallRepository
             return null;
         }
 
-        _source.OpenConnection();
-
         await using var command = _source.CreateCommand($"SELECT h.Id, h.Name, h.Capacity, h.Price, d.date " +
                                                         $"FROM Hall AS h " +
                                                         $"LEFT OUTER JOIN Dates AS d ON h.Id=d.HallId " +
                                                          $"WHERE h.Id = {id} " +
                                                         $"ORDER BY h.Id;");
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         if (!await reader.ReadAsync())
         {
@@ -106,7 +98,7 @@ public class HallRepository : IHallRepository
         var capacity = (int)reader["Capacity"];
         var price = (decimal)reader["Price"];
 
-        Hall res = new() { Id = id, Name = name, Capacity = capacity, Price=price, FreeDates = new() };
+        Hall res = new() { Id = id, Name = name, Capacity = capacity, Price = price, FreeDates = new() };
 
         do
         {
@@ -127,11 +119,9 @@ public class HallRepository : IHallRepository
 
     public async Task UpdateAsync(Hall hall, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-
         await using var command = _source.CreateCommand($"CALL UpdateHall('{hall.Id}', '{hall.Capacity}', " +
                                             $"'{hall.Price.ToString(CultureInfo.GetCultureInfo("en-US"))}');");
-        
+
         try
         {
             await command.ExecuteNonQueryAsync();
@@ -142,11 +132,11 @@ public class HallRepository : IHallRepository
         }
     }
 
-    private async Task<IEnumerable<Hall>>  GetManyWithDates(NpgsqlCommand command)
+    private async Task<IEnumerable<Hall>> GetManyWithDates(NpgsqlCommand command)
     {
         List<Hall> res = new();
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         int i = -1;
 

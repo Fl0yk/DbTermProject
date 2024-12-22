@@ -1,4 +1,4 @@
-﻿using Crematorium.Application.Abstractions;
+﻿using Crematorium.Application.Abstractions.Services;
 using Crematorium.Domain.Abstractions;
 using Crematorium.Domain.Entities;
 using System.Linq.Expressions;

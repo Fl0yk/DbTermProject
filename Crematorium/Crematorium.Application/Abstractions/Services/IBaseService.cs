@@ -1,7 +1,7 @@
 ﻿using Crematorium.Domain.Entities;
 using System.Linq.Expressions;
 
-namespace Crematorium.Application.Abstractions
+namespace Crematorium.Application.Abstractions.Services
 {
     public interface IBaseService<T> where T : Base
     {

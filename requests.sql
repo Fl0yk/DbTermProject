@@ -60,7 +60,7 @@ CREATE TABLE Orders(
     StateCode INTEGER,
     FOREIGN KEY (HallId) REFERENCES Hall(Id) ON DELETE SET NULL,
     FOREIGN KEY (CorposeId) REFERENCES Corpose(Id) ON DELETE SET NULL,
-    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE SET NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
     FOREIGN KEY (UrnId) REFERENCES RitualUrn(Id) ON DELETE SET NULL,
     FOREIGN KEY (StateCode) REFERENCES StateOrder(Code) ON DELETE SET NULL
 );
@@ -111,13 +111,11 @@ SELECT o.Id, o.DateOfActual, o.StateCode,
 cor.Name AS CorposeName, cor.Surname AS CorposeSurname,
 h.Id AS HallNumber,
 urn.Name AS UrnName,
-cof.Name AS CoffinName,
 u.UserId AS UserId, u.Name, u.Surname, u.NumPassport
 FROM Orders AS o
 LEFT JOIN Corpose AS cor ON cor.Id=o.CorposeId
 LEFT JOIN Hall AS h ON h.Id=o.HallId
 LEFT JOIN RitualUrn AS urn ON urn.Id=o.UrnId
-LEFT JOIN Coffin AS cof ON cof.Id=o.CoffinId
 LEFT JOIN UserWithRole AS u ON u.UserId=o.UserId;
 
 --Получение пользователя с ролью текстом + --
@@ -197,20 +195,24 @@ CREATE OR REPLACE TRIGGER OrdersAuditTrigger
 AFTER INSERT OR UPDATE OR DELETE ON Orders
 FOR EACH ROW EXECUTE FUNCTION ProcessOrderAudit();
 
----Просто вывод старой и новой цены при изменении зала---
-CREATE FUNCTION BeforHallUpdate()
-RETURNS TRIGGER AS $$
+--Логирование авторизации/регистрации пользователей--
+CREATE TABLE LoginLogs (
+    Id SERIAL PRIMARY KEY,
+    ClientNumPassport VARCHAR(50) NOT NULL,
+    Action VARCHAR(50) NOT NULL,
+    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE FUNCTION LogUserAction(passport_number VARCHAR, action_type VARCHAR) RETURNS VOID AS $$
 BEGIN
-	RAISE NOTICE 'OLD PRICE - %,
-				NEW PRICE - %',
-				NEW.Price, OLD.Price;
-	RETURN NEW;
+    IF action_type NOT IN ('Login', 'Register') THEN
+        RAISE EXCEPTION 'Invalid action type: %. Allowed types are Login or Register.', action_type;
+    END IF;
+
+    INSERT INTO LoginLogs (ClientNumPassport, Action)
+    VALUES (passport_number, action_type);
 END;
 $$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER BeforeHallUpdateTrigger
-BEFORE UPDATE ON Hall
-FOR EACH ROW EXECUTE FUNCTION BeforHallUpdate();
 
 
 ---Проверяет наличие пользователя---

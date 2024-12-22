@@ -1,4 +1,4 @@
-﻿using Crematorium.Domain.Entities;
+﻿using Crematorium.Domain.Abstractions.Loggers;
 
 namespace Crematorium.Domain.Abstractions
 {
@@ -9,8 +9,6 @@ namespace Crematorium.Domain.Abstractions
         ICorposeRepository CorposeRepository { get; }
         IRitualUrnRepository RitualUrnRepository { get; }
         IHallRepository HallRepository { get; }
-        public Task RemoveDatbaseAsync();
-        public Task CreateDatabaseAsync();
-        public Task SaveAllAsync();
+        IUserAuthLogger UserAuthLogger { get; }
     }
 }

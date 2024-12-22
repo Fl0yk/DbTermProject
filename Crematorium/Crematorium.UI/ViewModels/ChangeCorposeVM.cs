@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Crematorium.Application.Abstractions;
+using Crematorium.Application.Abstractions.Services;
 using Crematorium.Application.Validators;
 using Crematorium.Domain.Entities;
 using FluentValidation;

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Crematorium.Application.Abstractions;
+using Crematorium.Application.Abstractions.Services;
 using Crematorium.Domain.Entities;
 using Crematorium.UI.Fabrics;
 using Crematorium.UI.Pages;
@@ -30,8 +30,10 @@ namespace Crematorium.UI.ViewModels
             _urnService = urnService;
             _hallService = hallService;
             _orderService = orderService;
+
             Halls = new ObservableCollection<Hall>(_hallService.GetAllAsync().Result);
             RitualUrns = new ObservableCollection<RitualUrn>(_urnService.GetAllAsync().Result);
+
             HallDates = new ObservableCollection<Date>();
         }
 

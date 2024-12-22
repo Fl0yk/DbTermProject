@@ -8,14 +8,14 @@ public class OrderRepository : IOrderRepository
 {
     private readonly NpgsqlDataSource _source;
 
-    public OrderRepository(string connectionString)
+    public OrderRepository(NpgsqlDataSource source)
     {
-        _source = NpgsqlDataSource.Create(connectionString);
+        _source = source;
     }
 
     public async Task ChangeStatus(int orderId, StateOrder newState, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"CALL UpdateOrderStatus({orderId}, {(int)newState});");
 
         try
@@ -30,7 +30,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task CreateAsync(Order order, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"CALL CreateOrder(date('{order.DateOfStart:yyyy-MM-dd}'), {order.HallId!.Id}, {order.CorposeId.Id}, {order.Customer.Id}, {order.RitualUrnId!.Id}, {(int)order.State});");
 
         try
@@ -47,7 +47,7 @@ public class OrderRepository : IOrderRepository
     {
         List<Order> result = new List<Order>();
 
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"SELECT Id, DateOfActual, StateCode, " +
             $"CorposeName, CorposeSurname, CoproseNumpassport, " +
             $"HallNumber, HallName, HallCapacity, HallPrice, " +
@@ -55,7 +55,7 @@ public class OrderRepository : IOrderRepository
             $"UserId, Name, Surname, EmailAdress, NumPassport, RoleCode " +
             $"FROM FullOrders; ");
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         while (await reader.ReadAsync())
         {
@@ -71,7 +71,7 @@ public class OrderRepository : IOrderRepository
     {
         List<Order> result = new List<Order>();
 
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"SELECT Id, DateOfActual, StateCode, " +
             $"CorposeName, CorposeSurname, CoproseNumpassport, " +
             $"HallNumber, HallName, HallCapacity, HallPrice, " +
@@ -79,7 +79,7 @@ public class OrderRepository : IOrderRepository
             $"UserId, Name, Surname, EmailAdress, NumPassport, RoleCode " +
             $"FROM FullOrders WHERE UserId = {user.Id}; ");
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         while (await reader.ReadAsync())
         {

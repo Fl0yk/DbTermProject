@@ -28,6 +28,8 @@ namespace Crematorium.UI.ViewModels
 
         private void UpdateFields()
         {
+            CurUser = ServicesFabric.CurrentUser!;
+
             Name = CurUser.Name;
             Surname = CurUser.Surname;
             MailAdress = CurUser.MailAdress;

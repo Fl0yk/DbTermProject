@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Crematorium.Application.Abstractions;
+using Crematorium.Application.Abstractions.Services;
+using Crematorium.Domain.Abstractions;
 using Crematorium.UI.Fabrics;
 using Crematorium.UI.Pages;
 
@@ -9,9 +10,11 @@ namespace Crematorium.UI.ViewModels
     public partial class LoginVM : ObservableValidator
     {
         private IUserService _userService;
-        public LoginVM(IUserService userService) 
+        private readonly IUnitOfWork _unitOfWork;
+        public LoginVM(IUserService userService, IUnitOfWork unitOfWork) 
         {
             _userService = userService;
+            _unitOfWork = unitOfWork;
         }
 
         [ObservableProperty]
@@ -37,6 +40,9 @@ namespace Crematorium.UI.ViewModels
                 ServicesFabric.CurrentUser = _userService
                     .GetUserByNameAndPassport(InputName, InputNumPassport)
                     .Result;
+
+                _unitOfWork.UserAuthLogger.Log(InputNumPassport, Domain.Enums.LogAction.Login);
+
                 return true;
             }
             else

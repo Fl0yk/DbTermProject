@@ -8,15 +8,15 @@ public class UserRepository : IUserRepository
 {
     private readonly NpgsqlDataSource _source;
 
-    public UserRepository(string connectionString)
+    public UserRepository(NpgsqlDataSource source)
     {
-        _source = NpgsqlDataSource.Create(connectionString);
+        _source = source;
     }
 
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand($"CALL CreateUser('{user.Name}', '{user.Surname}', '{user.MailAdress}', {user.UserRole}, '{user.NumPassport}');");
+        //using var connection = _source.OpenConnection();
+        await using var command = _source.CreateCommand($"CALL CreateUser('{user.Name}', '{user.Surname}', '{user.MailAdress}', {(int)user.UserRole}, '{user.NumPassport}');");
 
         try
         {
@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"CALL DeleteUserById({id});");
 
         try
@@ -45,15 +45,15 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand($"SELECT * FROM Users WHERE Name = {name};");
+        //using var connection = _source.OpenConnection();
+        await using var command = _source.CreateCommand($"SELECT * FROM Users WHERE Name = '{name}';");
 
         return await GetManyUsers(command);
     }
 
     public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand("SELECT * FROM Users;");
 
         return await GetManyUsers(command);
@@ -66,10 +66,10 @@ public class UserRepository : IUserRepository
             return null;
         }
 
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"SELECT * FROM Users WHERE Id = {id};");
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         if (!await reader.ReadAsync())
         {
@@ -90,10 +90,10 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByNameAndPassport(string name, string numPassport, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
         await using var command = _source.CreateCommand($"SELECT * FROM Users WHERE Name = '{name}' AND NumPassport = '{numPassport}';");
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         if (!await reader.ReadAsync())
         {
@@ -114,13 +114,13 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> IsExist(string numPassport, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
+        //using var connection = _source.OpenConnection();
 
-        await using var command = _source.CreateCommand($"SELECT COUNT(1) FROM Users WHERE NumPassport={numPassport};");
+        await using var command = _source.CreateCommand($"SELECT COUNT(1) FROM Users WHERE NumPassport='{numPassport}';");
 
         var res = command.ExecuteScalar();
 
-        return (int)res > 0;
+        return (long)res > 0;
     }
 
     public async Task<bool> IsExist(string name, string numPassport, CancellationToken cancellationToken = default)
@@ -136,8 +136,8 @@ public class UserRepository : IUserRepository
 
     public async Task UpdateAsync(User user, CancellationToken cancellationToken = default)
     {
-        _source.OpenConnection();
-        await using var command = _source.CreateCommand($"CALL UpdateUser({user.Id}, '{user.Name}', '{user.Surname}', '{user.MailAdress}', {user.UserRole});");
+        //using var connection = _source.OpenConnection();
+        await using var command = _source.CreateCommand($"CALL UpdateUser({user.Id}, '{user.Name}', '{user.Surname}', '{user.MailAdress}', {(int)user.UserRole});");
 
         try
         {
@@ -153,7 +153,7 @@ public class UserRepository : IUserRepository
     {
         List<User> result = new List<User>();
 
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
         while (await reader.ReadAsync())
         {
             var id = (int)reader["Id"];

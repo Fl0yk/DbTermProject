@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Crematorium.Application.Abstractions;
+using Crematorium.Application.Abstractions.Services;
 using Crematorium.Domain.Entities;
 using Crematorium.UI.Fabrics;
 using System;
